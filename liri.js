@@ -56,7 +56,7 @@ function execute(cmd, arg) {
         break
 
       case 'do-what-it-says':
-        doWhatItSays() // New to account for recursive commands
+        doWhatItSays()
         break
 
       default:
@@ -88,6 +88,7 @@ function concertTable(concerts) {
   return table
 }
 
+// node liri.js concert-this <artistName>
 function concertThis(artistName) {
   let queryUrl = `https://rest.bandsintown.com/artists/${artistName}/events?app_id=${keys.bandsInTown.id}`
   axios.get(queryUrl)
@@ -116,6 +117,7 @@ function trackTable(track) {
   return table
 }
 
+// node liri.js spotify-this-song <songName>
 function spotifyThisSong(songName) {
   spotify.search({
       type: 'track',
@@ -150,6 +152,7 @@ function movieTable(movie) {
   return table
 }
 
+// node liri.js movie-this <movieName>
 function movieThis(movieName) {
   let queryUrl = `https://www.omdbapi.com/?t=${movieName}&apikey=${keys.omdb.key}`
   axios.get(queryUrl)
@@ -162,6 +165,7 @@ function movieThis(movieName) {
     })
 }
 
+// node liri.js do-what-it-says
 function doWhatItSays() {
   fs.readFile("random.txt", "utf8", function (error, data) {
 
