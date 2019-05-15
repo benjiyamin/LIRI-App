@@ -1,12 +1,10 @@
 require('dotenv').config()
-require('console.table')
 
 const fs = require('fs')
 
 const axios = require('axios')
 const Spotify = require('node-spotify-api')
 const moment = require('moment')
-const columnify = require('columnify')
 const Table = require('cli-table3')
 
 const keys = require('./keys.js')
@@ -72,8 +70,10 @@ function execute(cmd, arg) {
   }
 }
 
-function concertData(concerts) {
-  data = []
+function concertTable(concerts) {
+  let table = new Table({
+    head: ['Venue', 'Location', 'Date']
+  })
   concerts.forEach(concert => {
     let venue = concert.venue.name
     let location = concert.venue.city
@@ -81,40 +81,39 @@ function concertData(concerts) {
       location += `, ${concert.venue.region}`
     }
     let date = moment(concert.datetime).format('MMMM Do YYYY')
-    data.push({
-      'Venue': venue,
-      'Location': location,
-      'Date': date
-    })
+    table.push(
+      [venue, location, date]
+    )
   })
-  return data
+  return table
 }
 
 function concertThis(artistName) {
   let queryUrl = `https://rest.bandsintown.com/artists/${artistName}/events?app_id=${keys.bandsInTown.id}`
   axios.get(queryUrl)
     .then(function (response) {
-      let data = concertData(concerts = response.data)
-      console.log(`${data.length} results found.`)
-      console.table(data)
+      console.log(`${response.data.length} results found.`)
+      let table = concertTable(concerts = response.data)
+      console.log(table.toString())
     })
     .catch(function (error) {
       console.log(error)
     })
 }
 
-function trackData(track) {
+function trackTable(track) {
+  let table = new Table()
   let artistNames = []
   track.artists.forEach(artist => {
     artistNames.push(artist.name)
   });
-  let data = {
-    'Artist(s)': artistNames.join(', '),
-    'Name': track.name,
-    'Preview': track.preview_url,
-    'Album': track.album.name
-  }
-  return data
+  table.push(
+    ['Artist(s)', artistNames.join(', '), ],
+    ['Name', track.name],
+    ['Preview', track.preview_url],
+    ['Album', track.album.name],
+  )
+  return table
 }
 
 function spotifyThisSong(songName) {
@@ -124,30 +123,19 @@ function spotifyThisSong(songName) {
       limit: 1
     })
     .then(function (response) {
-      let data = trackData(track = response.tracks.items[0])
-      console.table(data)
+      let table = trackTable(track = response.tracks.items[0])
+      console.log(table.toString())
     })
     .catch(function (error) {
       console.log(error)
     })
 }
 
-function movieData(movie) {
-  let data = {
-    'Title': movie.Title,
-    'Year': movie.Year,
-    'Country': movie.Country,
-    'Language': movie.Language,
-    'Plot': movie.Plot,
-    'Actors': movie.Actors
-  }
-  movie.Ratings.forEach(rating => {
-    data[rating.Source] = rating.Value
-  });
-  return data
-}
-
-function pushMovieToTable(movie, table) {
+function movieTable(movie) {
+  let table = new Table({
+    colWidths: [null, 80],
+    wordWrap: true
+  })
   table.push(
     ['Title', movie.Title],
     ['Year', movie.Year],
@@ -166,11 +154,7 @@ function movieThis(movieName) {
   let queryUrl = `https://www.omdbapi.com/?t=${movieName}&apikey=${keys.omdb.key}`
   axios.get(queryUrl)
     .then(function (response) {
-      const table = new Table({
-        colWidths: [null, 80],
-        wordWrap: true
-      })
-      pushMovieToTable(movie = response.data, table)
+      let table = movieTable(movie = response.data)
       console.log(table.toString())
     })
     .catch(function (error) {
