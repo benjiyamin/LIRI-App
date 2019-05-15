@@ -4,6 +4,7 @@ const axios = require('axios')
 const Spotify = require('node-spotify-api')
 const moment = require('moment')
 const Table = require('cli-table3')
+var shortUrl = require('node-url-shortener');
 
 const keys = require('./keys.js')
 
@@ -70,7 +71,9 @@ function execute(cmd, arg) {
 
 function concertTable(concerts) {
   let table = new Table({
-    head: ['Venue', 'Location', 'Date']
+    head: ['Venue', 'Location', 'Date'],
+    colWidths: [30, null, null],
+    wordWrap: true
   })
   concerts.forEach(concert => {
     let venue = concert.venue.name
@@ -100,7 +103,7 @@ function concertThis(artistName) {
     })
 }
 
-function trackTable(track) {
+function trackTable(track, previewUrl) {
   let table = new Table()
   let artistNames = []
   track.artists.forEach(artist => {
@@ -109,7 +112,7 @@ function trackTable(track) {
   table.push(
     ['Artist(s)', artistNames.join(', '), ],
     ['Name', track.name],
-    ['Preview', track.preview_url],
+    ['Preview', previewUrl],
     ['Album', track.album.name],
   )
   return table
@@ -123,8 +126,15 @@ function spotifyThisSong(songName) {
       limit: 1
     })
     .then(function (response) {
-      let table = trackTable(track = response.tracks.items[0])
-      console.log(table.toString())
+      let track = response.tracks.items[0]
+      shortUrl.short(track.preview_url, function (err, url) {
+        if (!err) {
+          let table = trackTable(track = track, url)
+          console.log(table.toString())
+        } else {
+          console.log(err)
+        }
+      });
     })
     .catch(function (error) {
       console.log(error)
@@ -133,7 +143,7 @@ function spotifyThisSong(songName) {
 
 function movieTable(movie) {
   let table = new Table({
-    colWidths: [null, 80],
+    colWidths: [null, 50],
     wordWrap: true
   })
   table.push(
