@@ -151,4 +151,4 @@ $ node liri.js do-what-it-says
 
 ## License
 
-This project is licensed under GPL 3.0 - see [LICENSE](LICENSE.md) for details.
+Buy my a beer - see [LICENSE](LICENSE.md) for details.
