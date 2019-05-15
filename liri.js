@@ -1,7 +1,6 @@
-require('dotenv').config()
-
 const fs = require('fs')
 
+require('dotenv').config()
 const axios = require('axios')
 const Spotify = require('node-spotify-api')
 const moment = require('moment')
