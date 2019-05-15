@@ -1,0 +1,31 @@
+{
+  "name": "liri-app",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benjiyamin/LIRI-App.git"
+  },
+  "author": "Ben Miller (https://github.com/benjiyamin)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benjiyamin/LIRI-App/issues"
+  },
+  "homepage": "https://github.com/benjiyamin/LIRI-App#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cli-table3": "^0.5.1",
+    "columnify": "^1.5.4",
+    "console.table": "^0.10.0",
+    "dotenv": "^8.0.0",
+    "moment": "^2.24.0",
+    "node-spotify-api": "^1.1.1"
+  },
+  "devDependencies": {
+    "mocha": "^6.1.4"
+  }
+}
