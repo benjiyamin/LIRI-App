@@ -151,4 +151,4 @@ $ node liri.js do-what-it-says
 
 ## License
 
-Buy me a beer - see [LICENSE](LICENSE.md) for details.
+Just buy me a beer - see [LICENSE](LICENSE.md) for details.
