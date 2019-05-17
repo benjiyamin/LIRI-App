@@ -4,7 +4,7 @@ const axios = require('axios')
 const Spotify = require('node-spotify-api')
 const moment = require('moment')
 const Table = require('cli-table3')
-var shortUrl = require('node-url-shortener');
+const shortUrl = require('node-url-shortener');
 
 const keys = require('./keys.js')
 
@@ -16,11 +16,6 @@ let command = process.argv[2]
 let optionalArg = process.argv
   .slice(3)
   .join(' ')
-
-// When node executes script
-if (!module.parent) {
-  execute(command, optionalArg)
-}
 
 // Process the command
 function execute(cmd, arg) {
@@ -82,9 +77,7 @@ function concertTable(concerts) {
       location += `, ${concert.venue.region}`
     }
     let date = moment(concert.datetime).format('MMMM Do YYYY')
-    table.push(
-      [venue, location, date]
-    )
+    table.push([venue, location, date])
   })
   return table
 }
@@ -188,6 +181,11 @@ function doWhatItSays() {
     }
 
   });
+}
+
+// When node executes script
+if (!module.parent) {
+  execute(command, optionalArg)
 }
 
 exports.execute = execute
