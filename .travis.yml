@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "9"
+install:
+  - npm install
+  - touch .env
+  - echo SPOTIFY_ID=$SPOTIFY_ID >> .env
+  - echo SPOTIFY_SECRET=$SPOTIFY_SECRET >> .env
+  - echo BANDSINTOWN_ID=$BANDSINTOWN_ID >> .env
+  - echo OMDB_KEY=$OMDB_KEY >> .env
